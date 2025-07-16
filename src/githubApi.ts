@@ -18,7 +18,11 @@ export async function fetchUserRepos(username: string) {
   const response = await octokit.request('GET /users/{username}/repos', {
     username,
   });
-  return response.data;
+  // Ensure description is always a string
+  return response.data.map((repo: any) => ({
+    ...repo,
+    description: repo.description ?? '',
+  }));
 }
 
 // Fetch repositories for multiple usernames in parallel
