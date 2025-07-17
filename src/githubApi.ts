@@ -24,13 +24,3 @@ export async function fetchUserRepos(username: string) {
     description: repo.description ?? '',
   }));
 }
-
-// Fetch repositories for multiple usernames in parallel
-export async function fetchReposForUsernames(usernames: string[]) {
-  return Promise.all(
-    usernames.map(async (username) => ({
-      username,
-      repos: await fetchUserRepos(username),
-    }))
-  );
-} 
