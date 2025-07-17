@@ -11,6 +11,59 @@ A React application that allows users to search for GitHub usernames and view th
 - 🧪 Comprehensive unit tests with Vitest
 - 📱 Responsive design
 
+## Deployment with PM2
+
+Follow these steps to deploy your Vite + React app on a VPS using PM2:
+
+### 1. Build the Application
+```bash
+npm run build
+```
+This creates a `dist` folder with static files.
+
+### 2. Transfer Files to VPS
+Upload the `dist` folder (and `ecosystem.config.js`) to your VPS, or build on the VPS directly.
+
+### 3. Install a Static File Server
+On your VPS, install `serve` globally:
+```bash
+npm install -g serve
+```
+
+### 4. Use the Provided PM2 Config
+The file `ecosystem.config.js` is already included in this repo:
+```js
+module.exports = {
+  apps: [
+    {
+      name: 'github-user-search',
+      script: 'serve',
+      args: '-s dist -l 5000',
+      env: {
+        NODE_ENV: 'production',
+        PORT: 5000
+      }
+    }
+  ]
+};
+```
+
+### 5. Start the App with PM2
+```bash
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
+```
+
+### 6. (Optional) Configure Nginx for Your Domain
+Proxy requests from your domain to `localhost:5000` (see Nginx docs for details).
+
+### Notes on Environment Variables
+- The `VITE_GITHUB_TOKEN` is baked into the build at build time. If you need to change it, update your `.env` and rebuild (`npm run build`).
+- You do **not** need to set `VITE_GITHUB_TOKEN` in the PM2 config unless you are building on the server.
+
+---
+
 ## Tech Stack
 
 - **Frontend**: React 19 + TypeScript
