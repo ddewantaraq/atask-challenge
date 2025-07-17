@@ -146,3 +146,7 @@ src/
 ├── App.tsx             # Main application component
 └── main.tsx            # Application entry point
 ```
+
+## Demo Application 
+
+URL: http://45.32.101.42:5000/
