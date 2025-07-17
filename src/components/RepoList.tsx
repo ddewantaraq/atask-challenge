@@ -1,4 +1,4 @@
-import { Repo } from '../githubTypes';
+import { Repo } from "types/github";
 
 interface RepoListProps {
   repos: Repo[];
@@ -9,10 +9,10 @@ export default function RepoList({ repos }: RepoListProps) {
     return <div className="text-gray-500 text-sm">No repositories found.</div>;
   }
   return (
-    <div>
+    <div className="max-h-64 overflow-y-auto">
       {repos.map(repo => (
         <div key={repo.id} className="bg-gray-200 rounded p-4 mb-2 flex items-center justify-between">
-          <div>
+          <div className="text-start">
             <div className="font-semibold text-lg">{repo.name}</div>
             <div className="text-sm text-gray-700">{repo.description || 'No description'}</div>
           </div>

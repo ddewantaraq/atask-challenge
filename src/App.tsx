@@ -1,8 +1,18 @@
 import { useReducer, useRef, useEffect } from 'react';
 import './App.css';
-import { searchUsernames, fetchUserRepos } from './githubApi';
-import { initialState, reducer } from './githubTypes';
+import { searchUsernames, fetchUserRepos } from './apis/github';
+import { reducer } from './reducers/github';
 import UserList from './components/UserList';
+import { 
+  COLLAPSE_USER, 
+  EXPAND_USER, 
+  initialState, 
+  RESET_ALL, 
+  SET_ERROR, 
+  SET_REPOS, 
+  SET_USERS, 
+  START_SEARCH 
+} from './const';
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -15,30 +25,30 @@ export default function App() {
   };
 
   const handleSearch = async () => {
-    dispatch({ type: 'START_SEARCH' });
+    dispatch({ type: START_SEARCH });
     try {
       const users = await searchUsernames(state.search.trim());
-      dispatch({ type: 'SET_USERS', users });
+      dispatch({ type: SET_USERS, users });
       if (users.length === 0) {
-        dispatch({ type: 'SET_ERROR', error: 'No users found.' });
+        dispatch({ type: SET_ERROR, error: 'No users found.' });
       }
     } catch (err: any) {
-      dispatch({ type: 'SET_ERROR', error: err.message || 'Failed to search users.' });
+      dispatch({ type: SET_ERROR, error: err.message || 'Failed to search users.' });
     }
   };
 
   const handleExpand = async (username: string) => {
     if (state.expanded === username) {
-      dispatch({ type: 'COLLAPSE_USER' });
+      dispatch({ type: COLLAPSE_USER });
       return;
     }
-    dispatch({ type: 'EXPAND_USER', username });
+    dispatch({ type: EXPAND_USER, username });
     if (!state.repos[username]) {
       try {
         const repos = await fetchUserRepos(username);
-        dispatch({ type: 'SET_REPOS', username, repos });
+        dispatch({ type: SET_REPOS, username, repos });
       } catch (err: any) {
-        dispatch({ type: 'SET_ERROR', error: err.message || 'Failed to fetch repositories.' });
+        dispatch({ type: SET_ERROR, error: err.message || 'Failed to fetch repositories.' });
       }
     }
   };
@@ -46,6 +56,13 @@ export default function App() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+
+  useEffect(() => {
+    if (!state.search.trim()) {
+      dispatch({ type: RESET_ALL });
+    }
+  }, [state.search])
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

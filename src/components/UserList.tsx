@@ -1,5 +1,5 @@
+import { State } from 'types/github';
 import RepoList from './RepoList';
-import { State } from '../githubTypes';
 
 interface UserListProps {
   state: State;
@@ -17,7 +17,7 @@ export default function UserList({ state, onExpand }: UserListProps) {
   }
   return (
     <div>
-      <div className="text-gray-500 text-sm">Showing users for "{search}"</div>
+      {users.length > 0 && state.search.trim() && <div className="text-gray-500 text-sm mb-4">Showing users for "{search}"</div>}
       {users.map(username => (
         <div key={username} className="mb-2">
           <button
