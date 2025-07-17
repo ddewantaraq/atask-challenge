@@ -22,7 +22,7 @@ npm run build
 This creates a `dist` folder with static files.
 
 ### 2. Transfer Files to VPS
-Upload the `dist` folder (and `ecosystem.config.js`) to your VPS, or build on the VPS directly.
+Upload the `dist` folder (and `ecosystem.config.cjs`) to your VPS, or build on the VPS directly.
 
 ### 3. Install a Static File Server
 On your VPS, install `serve` globally:
@@ -31,14 +31,14 @@ npm install -g serve
 ```
 
 ### 4. Use the Provided PM2 Config
-The file `ecosystem.config.js` is already included in this repo:
+The file `ecosystem.config.cjs` is already included in this repo:
 ```js
 module.exports = {
   apps: [
     {
       name: 'github-user-search',
-      script: 'serve',
-      args: '-s dist -l 5000',
+      script: 'npm',
+      args: 'run start:prod',
       env: {
         NODE_ENV: 'production',
         PORT: 5000
@@ -50,7 +50,7 @@ module.exports = {
 
 ### 5. Start the App with PM2
 ```bash
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 pm2 save
 pm2 startup
 ```

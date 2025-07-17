@@ -2,8 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'github-user-search',
-      script: 'serve',
-      args: '-s dist -l 5000',
+      script: 'npm',
+      args: 'run start:prod',
       env: {
         NODE_ENV: 'production',
         PORT: 5000
